@@ -172,7 +172,7 @@ public class Driver extends JFrame {
 
         PropertiesHandler propertiesHandler = PropertiesHandler.getInstance("common.properties");
         System.setProperty("webdriver.gecko.driver", propertiesHandler.readValue("webdriver.gecko.driver"));
-        int hour = 15;
+        int hour = 7;
         if (args.length > 0) {
             try {
                 hour = Integer.parseInt(args[0]);

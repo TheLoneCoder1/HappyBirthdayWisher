@@ -38,7 +38,7 @@ public class HappyBirthdayWisher {
     public HappyBirthdayWisher(){
        loadListFromProperties(whiteListNames, "whitelist", ",");
        loadListFromProperties(wishList, "wishList", ";");
-       loadListFromProperties(blackListNames, "blacklist", ";");
+       loadListFromProperties(blackListNames, "blacklist", ",");
     }
 
     private void loadListFromProperties(Collection<String> collection, String keyword, String splitMark){
@@ -195,12 +195,18 @@ public class HappyBirthdayWisher {
                 final int textAreaIndexFinal = textAreaIndex;
                 //			final int postButtonsIndexFinal = postButtonsIndex;
                 String name = namesList.get(i);
+
+                if (blackListed(name)){
+                    createComment(name + " is BlackListed. Moving on");
+                    didWeMakeAWish = true;
+                    continue;
+                }
                 if (!whiteListed(name)) {
                     humanPause(1);
 
                     if (isNoneWriteable(name)){
                         textAreaIndex++;
-                        //postButtonsIndex++;
+                        didWeMakeAWish = true;
                         continue;
                     }
                     operateElement("Text Area", new Command(){
@@ -220,12 +226,10 @@ public class HappyBirthdayWisher {
                     if (textAreaIndex+1 < textAreas.size())
                         textAreaIndex++;
 
-                    if (!blackListed(name)) {
-                        createComment(name + " is Whitelisted. sending mail now");
-                        MailSender mailSender = new MailSender(name);
-                        mailSender.sendMail();
-                        didWeMakeAWish = true;
-                    }
+                    createComment(name + " is Whitelisted. sending mail now");
+                    MailSender mailSender = new MailSender(name);
+                    mailSender.sendMail();
+                    didWeMakeAWish = true;
                 }
             }
         }
